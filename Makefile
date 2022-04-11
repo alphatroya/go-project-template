@@ -63,10 +63,10 @@ $(GOIMPORTS):
 	go install golang.org/x/tools/cmd/goimports@master
 
 $(GOLANGCI):
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.40.1
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 $(SWAGGER_DOC):
-	go install github.com/swaggo/swag/cmd/swag@v1.7.0
+	go install github.com/swaggo/swag/cmd/swag@latest
 
 ## help: Prints help message
 .PHONY: help
