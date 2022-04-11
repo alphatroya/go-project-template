@@ -9,6 +9,7 @@ linters:
     - asciicheck
     - bodyclose
     - dupl
+    - nilerr
     - errorlint
     - forbidigo
     - goconst
