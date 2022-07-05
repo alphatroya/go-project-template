@@ -1,7 +1,8 @@
-GO_BIN := $(GOPATH)/bin
-GOIMPORTS := $(GO_BIN)/goimports
-GOLANGCI := $(GO_BIN)/golangci-lint
-SWAGGER_DOC := $(GO_BIN)/swag
+GOIMPORTS := go run golang.org/x/tools/cmd/goimports@v0.1.11
+GOFUMPT := go run mvdan.cc/gofumpt@v0.3.1
+GOLANGCI := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.46.2
+SWAGGER_DOC := go run github.com/swaggo/swag/cmd/swag@v1.8.1
+WATCHER := go run github.com/cosmtrek/air@v1.40.2
 
 ## build: Build an application
 .PHONY: build
@@ -41,7 +42,7 @@ docs: generate
 	$(SWAGGER_DOC) init
 
 ## generate: Regenerate all required files
-generate: $(SWAGGER_DOC)
+generate:
 	go generate
 
 ## tidy: Cleanup go.sum and go.mod files
@@ -51,22 +52,20 @@ tidy:
 
 ## lint: Launch project linters
 .PHONY: lint
-lint: $(GOLANGCI)
+lint:
 	$(GOLANGCI) run
 
 ## fmt: Reformat source code
 .PHONY: fmt
-fmt: $(GOIMPORTS)
+fmt:
+	$(SWAGGER_DOC) fmt
 	$(GOIMPORTS) -w -l .
+	$(GOFUMPT) -w -l .
 
-$(GOIMPORTS):
-	go install golang.org/x/tools/cmd/goimports@master
-
-$(GOLANGCI):
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-$(SWAGGER_DOC):
-	go install github.com/swaggo/swag/cmd/swag@latest
+## watch: run application and launch files observing for recompile package for changes
+.PHONY: watch
+watch:
+	$(WATCHER)
 
 ## help: Prints help message
 .PHONY: help
